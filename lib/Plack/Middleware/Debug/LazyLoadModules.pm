@@ -1,9 +1,9 @@
 package Plack::Middleware::Debug::LazyLoadModules;
 use strict;
 use warnings;
-use Plack::Util::Accessor qw/filter/;
+use Plack::Util::Accessor qw/filter class/;
 use parent qw/Plack::Middleware::Debug::Base/;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub run {
     my($self, $env, $panel) = @_;
@@ -19,7 +19,7 @@ sub run {
             next if $modules{$module};
             my $filter = $self->filter;
             if ( !$filter || (_is_regexp($filter) && $module =~ /$filter/) ) {
-                push @lazy_load_modules, $module;
+                push @lazy_load_modules, $self->_classnize($module);
             }
         }
 
@@ -33,6 +33,16 @@ sub run {
             $self->render_lines([sort @lazy_load_modules]),
         );
     };
+}
+
+sub _classnize {
+    my ($self, $module_path) = @_;
+
+    if ($self->class && $module_path =~ /\.pm$/) {
+        $module_path =~ s!/!::!g;
+        $module_path =~ s!\.pm$!!g;
+    }
+    return $module_path;
 }
 
 sub _is_regexp {
@@ -56,9 +66,11 @@ Plack::Middleware::Debug::LazyLoadModules - debug panel for Lazy Load Modules
       $app;
     };
 
-or you can set `filter` option(Regexp reference).
+or you can set `filter` option(Regexp reference) and `class` option(Foo/Bar.pm to Foo::Bar).
 
-      enable 'Debug::LazyLoadModules', filter => qr/\.pm$/;
+      enable 'Debug::LazyLoadModules',
+        filter => qr/\.pm$/,
+        class  => 1;
 
 
 =head1 DESCRIPTION

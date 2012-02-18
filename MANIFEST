@@ -8,6 +8,7 @@ README.pod
 t/00_compile.t
 t/01_basic.t
 t/lib/LazyWay.pm
+t/lib/LazyWay/ToGo.pm
 t/lib/LazyWay2.pm
 xt/01_perlcritic.t
 xt/02_pod-coverage.t
