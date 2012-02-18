@@ -17,11 +17,12 @@ name: Plack-Middleware-Debug-LazyLoadModules
 provides:
   Plack::Middleware::Debug::LazyLoadModules:
     file: lib/Plack/Middleware/Debug/LazyLoadModules.pm
-    version: 0.03
+    version: 0.04
 requires:
   Carp: 0
+  Plack::Middleware::Debug: 0
   parent: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/bayashi/Plack-Middleware-Debug-LazyLoadModules
-version: 0.03
+version: 0.04
